@@ -1,0 +1,315 @@
+-- 1. Stwórz Bazę „Sklep odzieżowy”
+
+CREATE DATABASE Sklep_Odzieżowy;
+
+USE Sklep_Odzieżowy;
+
+/*
+2. Utwórz tabelę „Producenci” z kolumnami:
+
+id producenta
+nazwa producenta
+adres producenta
+nip producenta
+data podpisania umowy z producentem
+Do każdej kolumny ustaw odpowiedni „constraint”
+*/
+
+CREATE TABLE Producenci (
+id_producenta INT PRIMARY KEY,
+nazwa_producenta TEXT,
+adres_producenta TEXT,
+nip_producenta INT,
+data_podpisania_umowy_z_producentem DATE);
+
+/*
+3. Utwórz tabelę „Produkty” z kolumnami:
+
+id produktu
+id producenta
+nazwa produktu
+opis produktu
+cena netto zakupu
+cena brutto zakupu
+cena netto sprzedaży
+cena brutto sprzedaży
+procent VAT sprzedaży
+Do każdej kolumny ustaw odpowiedni „constraint”
+*/
+
+CREATE TABLE Produkty (
+id_produktu INT PRIMARY KEY,
+id_producenta INT,
+nazwa_produktu TEXT,
+opis_produktu TEXT,
+cena_netto_zakupu FLOAT,
+cena_brutto_zakupu FLOAT,
+cena_netto_sprzedaży FLOAT,
+cena_brutto_sprzedaży FLOAT,
+procent_VAT_sprzedaży INT);
+
+/*
+4. Utwórz tabelę „Zamówienia” z kolumnami:
+
+id zamówienia
+id klienta
+id produktu
+Data zamówienia
+Do każdej kolumny ustaw odpowiedni „constraint”
+*/
+
+CREATE TABLE Zamówienia
+(
+id_zamówienia INT PRIMARY KEY,
+id_klienta INT,
+id_produktu INT,
+Data_zamówienia DATE);
+
+/*
+5. Utwórz tabelę „Klienci” z kolumnami:
+
+id klienta
+imię
+nazwisko
+adres
+Do każdej kolumny ustaw odpowiedni „constraint”
+*/
+
+CREATE TABLE Klienci
+(
+id_klienta INT PRIMARY KEY,
+imię TEXT,
+nazwisko TEXT,
+adres TEXT);
+
+/*
+6. Połącz tabele ze sobą za pomocą kluczy obcych:
+
+Produkty – Producenci
+Zamówienia – Produkty
+Zamówienia - Klienci
+*/
+
+-- Produkty – Producenci
+ALTER TABLE Produkty
+ADD CONSTRAINT fk_producent
+FOREIGN KEY (id_producenta) REFERENCES Producenci(id_producenta);
+
+-- Zamówienia – Produkty
+ALTER TABLE Zamówienia
+ADD CONSTRAINT fk_produkt
+FOREIGN KEY (id_produktu) REFERENCES Produkty(id_produktu);
+
+-- Zamówienia - Klienci
+ALTER TABLE Zamówienia
+ADD CONSTRAINT fk_klient
+FOREIGN KEY (id_klienta) REFERENCES Klienci(id_klienta);
+
+/*
+7. Każdą tabelę uzupełnij danymi wg:
+
+Tabela „Producenci” – 4 pozycje
+Tabela „Produkty” – 20 pozycji
+Tabela „Zamówienia” – 10 pozycji
+Tabela „Klienci” – 10 pozycji
+*/
+
+INSERT INTO Producenci
+VALUES
+(1, 'EHURT', 'ul, Kolejowa 28, 15-588 Białystok', 1234567891, '2020-11-20'),
+(2, 'PetEX', 'ul, Bydgoska 5, 85-790 Bydgoszcz', 1234567892, '2022-05-10'),
+(3, 'HURTMAX', 'ul, Bażantowa 8, 87-100 Toruń', 1234567893, '2018-01-15'),
+(4, 'DRUTEX', 'ul, Kwaleryjska 1, 00-004 Warszawa', 1234567894, '2015-04-01');
+
+INSERT INTO Produkty
+VALUES
+(1, 1, 'Rower', 'KELLY Model FR567', 1999.99, 2459.98, 4064.22, 4999.00, 23),
+(2, 1, 'Bidon', 'WATERMAX 1,5L PP', 99.99, 122.99, 162.59, 199.99, 23),
+(3, 1, 'Łańcuch do roweru', 'SHIMANO WDX346', 350.00, 430.50, 487.80, 600.00, 23),
+(4, 1, 'Kierownica do roweru', 'ROWEREX RT10', 400.00, 492.00, 609.75, 750.00, 23),
+(5, 1, 'Zestaw przerzutek SHIMANO', 'SHIMANO RX350T', 1200.00, 1476.00, 1625.20, 1999.00, 23),
+(6, 2, 'Smycz uniwersalna', 'Meet Pet 20m automatyczna', 81.30, 100.00, 121.95, 150.00, 23),
+(7, 2, 'Buda dla psa rozmiar "S"', 'Drewniana 150x40x50', 406.50, 500.00, 723.57, 890.00, 23),
+(8, 2, 'Karma dla psa Smaczi Wołowina', 'Smaczi wołowina 50% mięsa dla dużych psów 5kg', 148.14, 160.00, 230.55, 249.00, 8),
+(9, 2, 'Drapak dla kota', 'Pazurek rozmiar XL 160cm',  162.60, 200.00, 284.55, 350.00, 23),
+(10, 2, 'Karma dla psa Smaczi Wieprzowina', 'Smaczi wieprzowina 57% mięsa 5kg', 129.62 ,140.00, 185.18, 200.00, 8),
+(11, 2, 'Smaczki dla psa "Krewetki"', 'Petex smaczki w kształcie krewetek', 32.40, 35.00, 46.29, 50.00, 8),
+(12, 2, 'Żwirek dla kota', 'Petex hypoalergiczny niepylący 5kg', 40.65, 50.00, 81.30, 100.00, 23),
+(13, 3, 'Kurtka ocieplana SKATE', 'SKATE kurtka ocieplana z podszyciem wodoodporna rozmiar M', 813.00, 1000.00, 1219.51, 1500.00, 23),
+(14, 3, 'Narty dziecięce', 'JUPIYEY narty dziecięce 160cm', 406.50, 500.00, 568.29, 699.00, 23),
+(15, 3, 'Deska snowbordowa', 'SKATEBRIDGE czarna rozm 160', 2032.52, 2500.00, 2600.81, 3199.00, 23),
+(16, 3, 'Gogle do sportów zimowych', 'CHROMATIX białe rozm. uniwersalny', 97.56, 120.00, 178.04, 219.00, 23),
+(17, 3, 'Sanki drewniane', 'ALPINEQ DavosHQ10 110cm', 203.25, 250.00, 260.15, 319.99, 23),
+(18, 4, 'Drut stal FI5', 'Drut w zwoju stal ocynk FI5 100m', 28.45, 35.00, 48.77, 59.99, 23),
+(19, 4, 'Drut stal aluminium FI10', 'Drut w zwoju stal aluminium FI10 10m', 16.26, 20.00, 28.44, 34.99, 23),
+(20, 4, 'Przewód elektryczny trójżyłowy', 'Przewód prądowy YDY-P 3x2.5 10m', 24.39, 30.00, 40.64, 49.99, 23);
+
+INSERT INTO Klienci
+VALUES
+(1, 'Andrzej', 'Nowicki', 'ul. Bezowa 3 00-001 Warszawa'),
+(2, 'Ewa', 'Pura', 'ul. Koperkowa 10 75-202 Koszalin'),
+(3, 'Hubert', 'Nowak', 'ul. Leszczynowa 7/10 70-100 Szczecin'),
+(4, 'Barbara', 'Koleba', 'ul. Berberysowa 7/9 00-100 Warszawa'),
+(5, 'Ferdynand', 'Dobry', 'ul. Kawaleryjska 100/5 85-790 Bydgoszcz'),
+(6, 'Waldemar', 'Mokry', 'ul. Legionowa 108/56 15-650 Białystok'),
+(7, 'Krzysztof', 'Frankowski', 'ul. Jerzego Waszyngtona 3A/10, 00-145 Warszawa'),
+(8, 'Renata', 'Sidun', 'ul. Stoczniowa 2/100 80-398 Gdańsk'),
+(9, 'Błażej', 'Tymiński', 'ul. Jeżowa 4 99-907 Bytom'),
+(10, 'Urszula', 'Tylenda', 'ul. Sienkiewicza 10/5 15-003 Białystok');
+
+
+INSERT INTO Zamówienia
+VALUES
+(1, 2, 1, '2024-11-01'),
+(2, 1, 15, '2024-11-01'),
+(3, 5, 20, '2024-05-05'),
+(4, 6, 19, '2024-04-08'),
+(5, 3, 4, '2024-07-08'),
+(6, 10, 7, '2024-08-25'),
+(7, 9, 10, '2024-09-19'),
+(8, 8, 20, '2024-10-13'),
+(9, 7, 2, '2024-11-11'),
+(10, 4, 3, '2024-12-05');
+
+
+/*
+8. Wyświetl wszystkie produkty z wszystkimi danymi od producenta który znajduje się na pozycji 1 w tabeli „Producenci”
+*/
+
+SELECT
+	* 
+FROM Produkty
+WHERE id_producenta = 1;
+
+
+/*
+9. Posortuj te produkty alfabetycznie po nazwie
+*/
+
+SELECT
+	* 
+FROM Produkty
+WHERE id_producenta = 1
+ORDER BY nazwa_produktu;
+
+/*
+10. Wylicz średnią cenę za produktu od producenta z pozycji 1
+*/
+
+SELECT
+	ROUND(AVG(cena_brutto_zakupu), 2) AS "Średnia cena brutto zakupu produktu u producenta z ID = 1"
+FROM Produkty
+WHERE id_producenta = 1;
+
+/*
+11. Wyświetl dwie grupy produktów tego producenta:
+Połowa najtańszych to grupa: „Tanie”
+Pozostałe to grupa: „Drogie”
+*/
+
+SELECT 
+	id_produktu AS "ID produktu",
+	nazwa_produktu AS "Nazwa produktu",
+	cena_brutto_zakupu,
+	CASE 
+	WHEN cena_brutto_zakupu <= (SELECT AVG(cena_brutto_zakupu) FROM Produkty WHERE id_producenta = 1) THEN 'Tanie'
+	ELSE 'Drogie'
+	END AS "Grupa kosztowa produktów"
+FROM Produkty
+WHERE id_producenta = 1;
+
+
+/*
+12. Wyświetl produkty zamówione, wyświetlając tylko ich nazwę
+*/
+
+SELECT
+	nazwa_produktu AS "Nazwa produktu"
+FROM Zamówienia
+JOIN Produkty
+ON Zamówienia.id_produktu = Produkty.id_produktu
+ORDER BY nazwa_produktu;
+
+/*
+13. Wyświetl wszystkie produkty zamówione – ograniczając wyświetlanie do 5 pozycji
+*/
+
+SELECT
+	nazwa_produktu AS "Nazwa produktu"
+FROM Zamówienia
+JOIN Produkty
+ON Zamówienia.id_produktu = Produkty.id_produktu
+ORDER BY nazwa_produktu
+LIMIT 5;
+
+/*
+14. Policz łączną wartość wszystkich zamówień
+*/
+
+SELECT
+	ROUND(SUM(cena_brutto_sprzedaży), 2) AS "Suma wartości brutto wszystkich zamówionych produktów"
+FROM Zamówienia
+JOIN Produkty
+ON produkty.id_produktu = zamówienia.id_produktu;
+
+/*
+15. Wyświetl wszystkie zamówienia wraz z nazwą produktu sortując je wg daty od najstarszego do najnowszego
+*/
+
+SELECT
+	id_zamówienia AS "ID zamówienia",
+    Data_zamówienia AS "Data złożenia zamówienia",
+    nazwa_produktu AS "Nazwa produktu"
+FROM Zamówienia
+JOIN Produkty
+ON Produkty.id_produktu = Zamówienia.id_produktu
+ORDER BY Data_zamówienia;
+
+
+/*
+16. Sprawdź czy w tabeli produkty masz uzupełnione wszystkie dane – wyświetl pozycje dla których brakuje danych
+*/
+
+SELECT
+	*
+FROM Produkty
+WHERE 
+id_produktu IS NULL OR 
+id_producenta IS NULL OR 
+nazwa_produktu IS NULL OR 
+opis_produktu IS NULL OR 
+cena_netto_zakupu IS NULL OR 
+cena_brutto_zakupu IS NULL OR 
+cena_netto_sprzedaży IS NULL OR 
+cena_brutto_sprzedaży IS NULL OR 
+procent_VAT_sprzedaży IS NULL;
+
+/*
+17. Wyświetl produkt najczęściej sprzedawany wraz z jego ceną
+*/
+-- Nie sprecyzowano z jaką ceną produktu, dlatego przyjąłem cenę brutto sprzedaży. 
+
+SELECT 
+	Produkty.nazwa_produktu AS "Nazwa najczęściej sprzedawanego produktu",
+	Produkty.cena_brutto_sprzedaży AS "Cena brutto sprzedaży najczęściej kupowanego produktu"
+FROM Produkty
+JOIN Zamówienia
+ON Produkty.id_produktu = Zamówienia.id_produktu
+GROUP BY Zamówienia.id_produktu
+ORDER BY COUNT(Zamówienia.id_produktu) DESC
+LIMIT 1;
+
+
+/*
+18. Znajdź dzień w którym najwięcej zostało złożonych zamówień
+*/
+
+SELECT 
+    Zamówienia.data_zamówienia AS "Data z największą ilością zamówień",
+    COUNT(zamówienia.id_produktu) AS "Rekordowa ilość złożonych zamówień jednego dnia"
+FROM Zamówienia
+JOIN Produkty
+ON Produkty.id_produktu = Zamówienia.id_produktu
+GROUP BY Zamówienia.data_zamówienia
+ORDER BY COUNT(Zamówienia.id_produktu) DESC
+LIMIT 1;
